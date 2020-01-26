@@ -1,4 +1,4 @@
-# Pokedex Challenge
+# JS Challenge
 
 In this challenge you will use the Pokemon API (https://pokeapi.co/), the pokeapi-js-wrapper (https://github.com/PokeAPI/pokeapi-js-wrapper), and React via a Create-React-App to:
 
