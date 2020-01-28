@@ -14,7 +14,7 @@ const PokeClient = new Pokedex.Pokedex({
 function App() {
   const [offset, setOffset] = useState(0);
   const [pokeList, setPokeList] = useState([]);
-  const [details, setDetails] = useState({ name: "", powers: [] });
+  const [details, setDetails] = useState({ name: "", powers: [], sprites: {} });
   const [isInfoShowing, setIsInfoShowing] = useState(false);
 
   useEffect(() => {
@@ -41,7 +41,7 @@ function App() {
       console.log(error)
     );
     console.log(deets);
-    setDetails({ name, powers: deets.abilities });
+    setDetails({ name, powers: deets.abilities, sprites: deets.sprites });
     setIsInfoShowing(true);
   };
 
@@ -59,11 +59,11 @@ function App() {
       <div id="main-content">
         {isInfoShowing ? (
           <div className="poke-card info">
-            <p>Name:</p>
+            <img src={details.sprites.front_default} alt=""/>
             <h2>{details.name}</h2>
             <p>Powers:</p>
             {details.powers.map(power => (
-              <h4>{power.ability.name}</h4>
+              <h4 key={power.ability.name}>{power.ability.name}</h4>
             ))}
             <button
               className="btn close"
