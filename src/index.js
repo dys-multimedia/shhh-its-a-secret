@@ -1,20 +1,23 @@
-import React, { useState, useEffect } from "react";
-import ReactDOM from "react-dom";
-
-import "./styles.scss";
-
-const Pokedex = require("pokeapi-js-wrapper");
-
-const PokeClient = new Pokedex.Pokedex({
-  protocol: "https",
-  cache: true,
-  timeout: 5000
-});
+import React, { useState, useEffect } from 'react';
+import ReactDOM from 'react-dom';
+import './styles.scss';
 
 function App() {
   const [offset, setOffset] = useState(0);
-  const [pokeList, setPokeList] = useState([]);
-  const [details, setDetails] = useState({ name: "", powers: [], sprites: {} });
+  const [pokemon, setPokemon] = useState({
+    results: [
+      {
+        name: 'Bulbasaur',
+      },
+      {
+        name: 'Ivysaur',
+      },
+      {
+        name: 'Venusaur',
+      },
+    ],
+  });
+  const [details, setDetails] = useState({ name: '', powers: [], sprites: {} });
   const [isInfoShowing, setIsInfoShowing] = useState(false);
 
   useEffect(() => {
@@ -22,24 +25,31 @@ function App() {
   }, [offset]); // Only re-run the effect if offset changes
 
   const fetchPokemon = async interval => {
-    const pokes = await PokeClient.getPokemonsList(interval).catch(error =>
-      console.log(error)
-    );
-    const results = pokes.results;
-    setPokeList(results);
-    console.log(results);
+    const res = await fetch(
+      `https://pokeapi.co/api/v2/pokemon/?limit=${interval.limit}&offset=${interval.offset}`
+    ).catch(error => console.log(error));
+    const pokemon = await res.json();
+    setPokemon(pokemon);
+    console.log(pokemon);
   };
 
   const previous = () => {
-    offset >= 12 ? setOffset(prevState => prevState - 12) : setOffset(0);
+    if (!pokemon.previous) return;
+    // console.log(pokemon.previous);
+    setOffset(prevState => prevState - 12);
   };
+
   const next = () => {
+    if (!pokemon.next) return;
+    // console.log(pokemon.next);
     setOffset(prevState => prevState + 12);
   };
+
   const select = async name => {
-    const deets = await PokeClient.getPokemonByName(name).catch(error =>
-      console.log(error)
-    );
+    const res = await fetch(
+      `https://pokeapi.co/api/v2/pokemon/${name}`
+    ).catch(error => console.log(error));
+    const deets = await res.json();
     console.log(deets);
     setDetails({ name, powers: deets.abilities, sprites: deets.sprites });
     setIsInfoShowing(true);
@@ -59,7 +69,7 @@ function App() {
       <div id="main-content">
         {isInfoShowing ? (
           <div className="poke-card info">
-            <img src={details.sprites.front_default} alt=""/>
+            <img src={details.sprites.front_default} alt="" />
             <h2>{details.name}</h2>
             <p>Powers:</p>
             {details.powers.map(power => (
@@ -74,7 +84,7 @@ function App() {
           </div>
         ) : (
           <ul className="pokemon">
-            {pokeList.map(poke => (
+            {pokemon.results.map(poke => (
               <li
                 className="poke-card"
                 key={poke.name}
@@ -104,5 +114,5 @@ function App() {
   );
 }
 
-const rootElement = document.getElementById("root");
+const rootElement = document.getElementById('root');
 ReactDOM.render(<App />, rootElement);
