@@ -83,25 +83,26 @@ function App() {
             </button>
           </div>
         ) : (
-          <ul className="pokemon">
-            {pokemon.results.map(poke => (
-              <li
-                className="poke-card"
-                key={poke.name}
-                onClick={() => select(poke.name)}
-              >
-                <h3>{poke.name}</h3>
-              </li>
-            ))}
-          </ul>
+          <>
+            <ul className="pokemon">
+              {pokemon.results.map(poke => (
+                <li
+                  className="poke-card"
+                  key={poke.name}
+                  onClick={() => select(poke.name)}
+                >
+                  <h3>{poke.name}</h3>
+                </li>
+              ))}
+            </ul>
+            <button id="previous" className="btn" onClick={previous}>
+              Previous
+            </button>
+            <button id="next" className="btn" onClick={next}>
+              Next
+            </button>
+          </>
         )}
-
-        <button id="previous" className="btn" onClick={previous}>
-          Previous
-        </button>
-        <button id="next" className="btn" onClick={next}>
-          Next
-        </button>
       </div>
 
       <img
