@@ -1,20 +1,20 @@
-import React, { useState, useEffect } from "react";
-import ReactDOM from "react-dom";
+import React, { useState, useEffect } from 'react';
+import ReactDOM from 'react-dom';
 
-import "./styles.scss";
+import './styles.scss';
 
-const Pokedex = require("pokeapi-js-wrapper");
+const Pokedex = require('pokeapi-js-wrapper');
 
 const PokeClient = new Pokedex.Pokedex({
-  protocol: "https",
+  protocol: 'https',
   cache: true,
-  timeout: 5000
+  timeout: 5000,
 });
 
 function App() {
   const [offset, setOffset] = useState(0);
   const [pokeList, setPokeList] = useState([]);
-  const [details, setDetails] = useState({ name: "", powers: [], sprites: {} });
+  const [details, setDetails] = useState({ name: '', powers: [], sprites: {} });
   const [isInfoShowing, setIsInfoShowing] = useState(false);
 
   useEffect(() => {
@@ -59,7 +59,7 @@ function App() {
       <div id="main-content">
         {isInfoShowing ? (
           <div className="poke-card info">
-            <img src={details.sprites.front_default} alt=""/>
+            <img src={details.sprites.front_default} alt="" />
             <h2>{details.name}</h2>
             <p>Powers:</p>
             {details.powers.map(power => (
@@ -73,25 +73,26 @@ function App() {
             </button>
           </div>
         ) : (
-          <ul className="pokemon">
-            {pokeList.map(poke => (
-              <li
-                className="poke-card"
-                key={poke.name}
-                onClick={() => select(poke.name)}
-              >
-                <h3>{poke.name}</h3>
-              </li>
-            ))}
-          </ul>
+          <>
+            <ul className="pokemon">
+              {pokeList.map(poke => (
+                <li
+                  className="poke-card"
+                  key={poke.name}
+                  onClick={() => select(poke.name)}
+                >
+                  <h3>{poke.name}</h3>
+                </li>
+              ))}
+            </ul>
+            <button id="previous" className="btn" onClick={previous}>
+              Previous
+            </button>
+            <button id="next" className="btn" onClick={next}>
+              Next
+            </button>
+          </>
         )}
-
-        <button id="previous" className="btn" onClick={previous}>
-          Previous
-        </button>
-        <button id="next" className="btn" onClick={next}>
-          Next
-        </button>
       </div>
 
       <img
@@ -104,5 +105,5 @@ function App() {
   );
 }
 
-const rootElement = document.getElementById("root");
+const rootElement = document.getElementById('root');
 ReactDOM.render(<App />, rootElement);
