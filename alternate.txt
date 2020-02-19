@@ -1,0 +1,30 @@
+componentDidMount() {
+  this.fetchPokemon(this.state.offset);
+}
+
+fetchPokemon = async offset => {
+  const res = await fetch(
+    `https://pokeapi.co/api/v2/pokemon/?limit=${this.state.limit}&offset=${offset}`
+  ).catch(error => console.log(error));
+  const pokes = await res.json();
+  this.setState({ pokemon: pokes });
+  console.log(pokes);
+};
+
+previous = () => {
+  if (this.state.offset === 0) return;
+  this.setState(prevState => {
+    return { offset: prevState.offset - this.state.limit };
+  });
+  this.fetchPokemon(this.state.offset - this.state.limit);
+};
+
+next = () => {
+  if (this.state.offset > this.state.pokemon.count - this.state.limit) return;
+  this.setState(prevState => {
+    return { offset: prevState.offset + this.state.limit };
+  });
+  this.fetchPokemon(this.state.offset + this.state.limit);
+};
+
+
